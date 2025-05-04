@@ -131,3 +131,9 @@ The program will print:
 ## Full Report
 
 For detailed analysis, benchmarking methodology, and results, refer to the [Project Report (PDF)](DSDA_Project_Report_Group5.pdf).
+
+---
+
+## Contributors
+- [Vishal Kevat](https://github.com/vishalkevat007)  
+- [Adrija Chakraborty](https://github.com/Adrija-debug)
