@@ -1,8 +1,10 @@
-# SAT Solver
+# SAT Solver Implementation with DPLL, CCL, and VSIDS Heuristics
 
-This project implements a SAT solver using the DPLL algorithm with Conflict-Clause-Learning (CCL) and Variable State Independent Decaying Sum (VSIDS) heuristics. It is designed to read a CNF file, solve the Boolean satisfiability problem, and print the results.
+This project implements a SAT solver using the DPLL algorithm with Conflict-Clause-Learning (CCL) and Variable State Independent Decaying Sum (VSIDS) heuristics in C++. It is designed to read a CNF file, solve the Boolean satisfiability problem, and print the results.
 
 It also implements the basic DPLL and basic DPLL with Conflict-Clause-Learning (CCL) for benchmarking.
+
+---
 
 ## Directory Structure
 
@@ -15,6 +17,8 @@ It also implements the basic DPLL and basic DPLL with Conflict-Clause-Learning (
 - **`images/`**: This folder has benchmarking plots and other supporting images.
 - **`run.sh`**: This shell is used to run all cnf files from benchmark_files folder by selecting the required solver out of the three.
 - **`DSDA_Project_Report_Group5.pdf`**: This PDF includes detailed documentation on the algorithm, changes in heuristics, results, and analysis.
+
+---
 
 ## How to Run
 
@@ -57,6 +61,7 @@ The program will print:
 - **Time taken** (if SAT): Displays the time taken to run the algorithm.
 - **Memory used** (if SAT): Displays the memory used to run the algorithm.
 
+---
 
 ## How to Benchmark
 
@@ -79,3 +84,19 @@ The program will print:
 ```
 
 3. Graphs will be saved in ./images folder.
+
+---
+
+## Benchmarking Results
+
+### Time Efficiency Comparison
+![Time Efficiency](images/performance_time_analysis.png)
+
+### Memory Usage Comparison
+![Memory Usage](images/performance_memory_analysis.png)
+
+---
+
+## Full Report
+
+For detailed analysis, benchmarking methodology, and results, refer to the [Project Report (PDF)](DSDA_Project_Report_Group5.pdf).
