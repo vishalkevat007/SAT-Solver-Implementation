@@ -57,7 +57,7 @@ for cnf_file in cnf_files:
             if label == "VSIDS":
                 row["Result"] = result
  
-            row[f"Time ({label})"] = round(time, 7)
+            row[f"Time ({label})"] = round(time, 6)
             row[f"Memory ({label})"] = memory_KB
             # row[f"Memory ({label})"] = round(memory_KB, 2)
  

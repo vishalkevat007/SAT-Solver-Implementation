@@ -9,7 +9,7 @@ plt.rcParams['axes.titlesize'] = 20      # Title
 plt.rcParams['axes.labelsize'] = 16      # X/Y axis labels
 plt.rcParams['xtick.labelsize'] = 12     # X tick labels
 plt.rcParams['ytick.labelsize'] = 12     # Y tick labels
-plt.rcParams['legend.fontsize'] = 12     # Legend text
+plt.rcParams['legend.fontsize'] = 14     # Legend text
 
 # 1. Read the data in original order
 df = pd.read_csv('solver_comparison_tabulated.csv')
