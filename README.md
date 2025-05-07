@@ -74,13 +74,13 @@ The program will print:
 1. In the same directory and terminal, execute the following:
 
 ```bash
-   python benchmark.py
+   python3 benchmark.py
 ```
 
 2. The above python code generates the benchmarking csv file. To plot the results from this csv file, run:
 
 ```bash
-   python graph_plot.py
+   python3 graph_plot.py
 ```
 
 3. Graphs will be saved in ./images folder.
