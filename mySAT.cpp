@@ -104,12 +104,11 @@ vector<unordered_set<int>> cnf;                  // Dynamic CNF (clauses updated
     // Print assignments in sorted order.
     void print_assignments() {
         cout << "ASSIGNMENT: ";
-        // Print all variables from 1 to variables.size()-1.
         for (size_t i = 1; i < variables.size(); i++) {
-            // If a variable was never assigned, default its value to 0.
-            int value = (variables[i].value == -1 ? 0 : variables[i].value);
-            cout << i << "=" << value << " ";
+            if (variables[i].value != -1) {
+                cout << i << "=" << variables[i].value << " ";
             }
+        }
         cout << "\n";
     }
 
