@@ -431,7 +431,7 @@ void print_assignment(const vector<int> &assignment, int numLiterals) {
 //--------------------------------------------------------------
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        cout << "Usage: ./mySAT2 <cnf_file>\n";
+        cout << "Usage: ./DPLL_CCL <cnf_file>\n";
         return 1;
     }
 

@@ -141,7 +141,7 @@ vector<unordered_set<int>> load_cnf(const string& filename, int& maxVar) {
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        cout << "Usage: ./mySAT1 <cnf_file>\n";
+        cout << "Usage: ./DPLL <cnf_file>\n";
         return 1;
     }
 
