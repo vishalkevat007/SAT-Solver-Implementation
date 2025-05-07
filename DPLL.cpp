@@ -167,7 +167,11 @@ int main(int argc, char* argv[]) {
         if (sat) {
             cout << "ASSIGNMENT: ";
             for (int i = 1; i <= maxVar; i++) {
-                cout << i << "=" << (assignments.count(i) ? assignments[i] : 0) << " ";
+                auto it = assignments.find(i);
+                if (it != assignments.end()) {
+                    // it->second is 1 for true, 0 for false
+                    cout << i << "=" << it->second << " ";
+                }
             }
             cout << "\n";
         }

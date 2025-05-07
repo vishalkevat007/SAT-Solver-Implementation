@@ -1,6 +1,17 @@
 // DPLL + CCL
 
-#include <bits/stdc++.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
+#include <cstdlib>
+#include <algorithm>
+#include <chrono>
+#include <iomanip>
+#include <filesystem>
 #include <iomanip>
 #include <filesystem>
 
@@ -127,12 +138,14 @@ public:
         return dpll();
     }
 
-    // Prints the final assignment in sorted order; unassigned variables default to 0.
+    // Prints the final assignment in sorted order; unassigned variables not printed.
     void print_assignments() {
         cout << "ASSIGNMENT: ";
         for (size_t i = 1; i < variables.size(); i++) {
-            int value = (variables[i].value == -1 ? 0 : variables[i].value);
-            cout << i << "=" << value << " ";
+            // only print if this variable was actually assigned
+            if (variables[i].value != -1) {
+                cout << i << "=" << variables[i].value << " ";
+            }
         }
         cout << "\n";
     }
@@ -408,22 +421,6 @@ vector<unordered_set<int>> load_cnf(const string &filename) {
         throw runtime_error("Error: No valid clauses found in CNF file.");
     }
     return clauses;
-}
-
-//--------------------------------------------------------------
-// Output Function: Print Final Assignment
-//--------------------------------------------------------------
-void print_assignment(const vector<int> &assignment, int numLiterals) {
-    vector<int> solution(numLiterals + 1, -1); // -1 = unassigned (treated as false)
-    for (int lit : assignment) {
-        int var = abs(lit);
-        solution[var] = (lit > 0 ? 1 : 0);
-    }
-    cout << "ASSIGNMENT: ";
-    for (int var = 1; var <= numLiterals; var++) {
-        cout << var << "=" << (solution[var] == 1 ? 1 : 0) << " ";
-    }
-    cout << "\n";
 }
 
 //--------------------------------------------------------------
