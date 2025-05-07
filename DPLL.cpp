@@ -9,6 +9,7 @@
 #include <chrono>
 #include <unordered_map>
 #include <iomanip>
+#include <filesystem>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -131,6 +132,10 @@ vector<unordered_set<int>> load_cnf(const string& filename, int& maxVar) {
         }
         if (!clause.empty()) clauses.push_back(clause);
     }
+    if (clauses.empty())
+    {
+        throw runtime_error("Error: No valid clauses found in CNF file.");
+    }
     return clauses;
 }
 
@@ -140,27 +145,43 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int maxVar;
-    auto clauses = load_cnf(argv[1], maxVar);
-    unordered_map<int, int> assignments;
-
-    auto start = chrono::high_resolution_clock::now();
-    bool sat = dpll(clauses, assignments, maxVar);
-    auto end = chrono::high_resolution_clock::now();
-    long long memory_used = getMemoryUsage();
-
-    cout << "[DPLL Only]\nRESULT: " << (sat ? "SAT" : "UNSAT") << "\n";
-    if (sat) {
-        cout << "ASSIGNMENT: ";
-        for (int i = 1; i <= maxVar; i++) {
-            cout << i << "=" << (assignments.count(i) ? assignments[i] : 0) << " ";
+    try
+    {
+        string file_path = argv[1];
+        if (file_path.size() < 4 || file_path.substr(file_path.size() - 4) != ".cnf" || !std::filesystem::exists(file_path))
+        {
+            cerr << "Error: Input file must be a valid .cnf file and must exist.\n";
+            return 1;
         }
-        cout << "\n";
+
+        int maxVar;
+        auto clauses = load_cnf(file_path, maxVar);
+        unordered_map<int, int> assignments;
+
+        auto start = chrono::high_resolution_clock::now();
+        bool sat = dpll(clauses, assignments, maxVar);
+        auto end = chrono::high_resolution_clock::now();
+        long long memory_used = getMemoryUsage();
+
+        cout << "[DPLL Only]\nRESULT: " << (sat ? "SAT" : "UNSAT") << "\n";
+        if (sat) {
+            cout << "ASSIGNMENT: ";
+            for (int i = 1; i <= maxVar; i++) {
+                cout << i << "=" << (assignments.count(i) ? assignments[i] : 0) << " ";
+            }
+            cout << "\n";
+        }
+        std::cout << std::fixed << std::setprecision(7);
+        cout << "Time taken: " << chrono::duration<double>(end - start).count() << " seconds\n";
+        // Reset formatting to default for memory output
+        std::cout.unsetf(std::ios_base::floatfield);
+        cout << "Memory used: " << memory_used << " KB\n";
     }
-    std::cout << std::fixed << std::setprecision(7);
-    cout << "Time taken: " << chrono::duration<double>(end - start).count() << " seconds\n";
-    // Reset formatting to default for memory output
-    std::cout.unsetf(std::ios_base::floatfield);
-    cout << "Memory used: " << memory_used << " KB\n";
+    catch (const exception& e)
+    {
+        cerr << e.what() << "\n";
+        return 1;
+    }
+
     return 0;
 }

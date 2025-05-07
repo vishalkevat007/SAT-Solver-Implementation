@@ -2,6 +2,8 @@
 
 #include <bits/stdc++.h>
 #include <iomanip>
+#include <filesystem>
+
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <windows.h>
@@ -401,6 +403,10 @@ vector<unordered_set<int>> load_cnf(const string &filename) {
         }
         clauses.push_back(clause);
     }
+    if (clauses.empty())
+    {
+        throw runtime_error("Error: No valid clauses found in CNF file.");
+    }
     return clauses;
 }
 
@@ -428,24 +434,40 @@ int main(int argc, char* argv[]) {
         cout << "Usage: ./mySAT2 <cnf_file>\n";
         return 1;
     }
-    string file_path = argv[1];
-    vector<unordered_set<int>> clauses = load_cnf(file_path);
-    DPLLSolver_DS solver(clauses);
 
-    auto start_time = high_resolution_clock::now();
-    bool result = solver.solve();
-    auto end_time = high_resolution_clock::now();
-    chrono::duration<double> time_taken = end_time - start_time;
-    long long memory_used = getMemoryUsage();
+    try
+    {
+        string file_path = argv[1];
+        if (file_path.size() < 4 || file_path.substr(file_path.size() - 4) != ".cnf" || !std::filesystem::exists(file_path))
+        {
+            cerr << "Error: Input file must be a valid .cnf file and must exist.\n";
+            return 1;
+        }
+        
+        vector<unordered_set<int>> clauses = load_cnf(file_path);
+        DPLLSolver_DS solver(clauses);
 
-    cout << "[DPLL + CCL]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
-    if (result)
-        solver.print_assignments();
-    std::cout << std::fixed << std::setprecision(7);
-    cout << "Time taken: " << time_taken.count() << " seconds\n";
-    // Reset formatting to default for memory output
-    std::cout.unsetf(std::ios_base::floatfield);
-    cout << "Memory used: " << memory_used << " KB\n";
+        auto start_time = high_resolution_clock::now();
+        bool result = solver.solve();
+        auto end_time = high_resolution_clock::now();
+        chrono::duration<double> time_taken = end_time - start_time;
+        long long memory_used = getMemoryUsage();
+
+        cout << "[DPLL + CCL]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
+        if (result)
+            solver.print_assignments();
+        std::cout << std::fixed << std::setprecision(7);
+        cout << "Time taken: " << time_taken.count() << " seconds\n";
+        // Reset formatting to default for memory output
+        std::cout.unsetf(std::ios_base::floatfield);
+        cout << "Memory used: " << memory_used << " KB\n";
+    
+    }
+    catch (const exception& e)
+    {
+        cerr << e.what() << "\n";
+        return 1;
+    }
 
     return 0;
 }

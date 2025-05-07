@@ -11,6 +11,40 @@
 #include <algorithm>
 #include <chrono>
 #include <iomanip>
+#include <filesystem>
+
+#if defined(_WIN32) || defined(_WIN64)
+#include <windows.h>
+#include <psapi.h>
+double get_memory_usage() {
+    PROCESS_MEMORY_COUNTERS memCounters;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &memCounters, sizeof(memCounters))) {
+        return memCounters.WorkingSetSize / (1024.0); // bytes to KB
+    }
+    return 0.0;
+}
+#elif defined(__linux__)
+#include <unistd.h>
+double get_memory_usage() {
+    std::ifstream status_file("/proc/" + std::to_string(getpid()) + "/status");
+    std::string line;
+    while (std::getline(status_file, line)) {
+        if (line.find("VmRSS:") == 0) {
+            std::stringstream ss(line.substr(6));
+            long long memory_kb;
+            ss >> memory_kb;
+            return (memory_kb);     // already in KB
+        }
+    }
+    std::cerr << "Error: Could not read VmRSS from /proc/self/status on Linux." << std::endl;
+    return -1;
+}
+#else
+double getMemoryUsage() {
+    std::cerr << "Error: Memory usage measurement is not implemented for this platform." << std::endl;
+    return -1;
+}
+#endif
 
 using namespace std;
 
@@ -414,41 +448,12 @@ vector<unordered_set<int>> load_cnf(const string& filename) {
         }
         clauses.push_back(clause);
     }
+    if (clauses.empty())
+    {
+        throw runtime_error("Error: No valid clauses found in CNF file.");
+    }
     return clauses;
 }
-
-#if defined(_WIN32) || defined(_WIN64)
-#include <windows.h>
-#include <psapi.h>
-double get_memory_usage() {
-    PROCESS_MEMORY_COUNTERS memCounters;
-    if (GetProcessMemoryInfo(GetCurrentProcess(), &memCounters, sizeof(memCounters))) {
-        return memCounters.WorkingSetSize / (1024.0); // bytes to KB
-    }
-    return 0.0;
-}
-#elif defined(__linux__)
-#include <unistd.h>
-double get_memory_usage() {
-    std::ifstream status_file("/proc/" + std::to_string(getpid()) + "/status");
-    std::string line;
-    while (std::getline(status_file, line)) {
-        if (line.find("VmRSS:") == 0) {
-            std::stringstream ss(line.substr(6));
-            long long memory_kb;
-            ss >> memory_kb;
-            return (memory_kb);     // already in KB
-        }
-    }
-    std::cerr << "Error: Could not read VmRSS from /proc/self/status on Linux." << std::endl;
-    return -1;
-}
-#else
-double getMemoryUsage() {
-    std::cerr << "Error: Memory usage measurement is not implemented for this platform." << std::endl;
-    return -1;
-}
-#endif
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
@@ -456,25 +461,38 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    string file_path = argv[1];
-    vector<unordered_set<int>> clauses = load_cnf(file_path);
-    DPLLSolver_DS solver(clauses);
+    try
+    {
+        string file_path = argv[1];
+        if (file_path.size() < 4 || file_path.substr(file_path.size() - 4) != ".cnf" || !std::filesystem::exists(file_path))
+        {
+            cerr << "Error: Input file must be a valid .cnf file and must exist.\n";
+            return 1;
+        }
 
-    auto start_time = chrono::high_resolution_clock::now();
-    bool result = solver.solve();
-    auto end_time = chrono::high_resolution_clock::now();
-    chrono::duration<double> time_taken = end_time - start_time;
-    double memory_used = get_memory_usage();
+        vector<unordered_set<int>> clauses = load_cnf(file_path);
+        DPLLSolver_DS solver(clauses);
 
-    cout << "[DPLL + CCL + VSIDS]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
-    if (result)
-        solver.print_assignments();
-    std::cout << std::fixed << std::setprecision(7);
-    cout << "Time taken: " << time_taken.count() << " seconds\n";
-    // Reset formatting to default for memory output
-    std::cout.unsetf(std::ios_base::floatfield);
-    cout << "Memory used: " << memory_used << " KB\n";
-   
+        auto start_time = chrono::high_resolution_clock::now();
+        bool result = solver.solve();
+        auto end_time = chrono::high_resolution_clock::now();
+        chrono::duration<double> time_taken = end_time - start_time;
+        double memory_used = get_memory_usage();
+
+        cout << "[DPLL + CCL + VSIDS]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
+        if (result)
+            solver.print_assignments();
+        std::cout << std::fixed << std::setprecision(7);
+        cout << "Time taken: " << time_taken.count() << " seconds\n";
+        // Reset formatting to default for memory output
+        std::cout.unsetf(std::ios_base::floatfield);
+        cout << "Memory used: " << memory_used << " KB\n";
+    }
+    catch (const exception& e)
+    {
+        cerr << e.what() << "\n";
+        return 1;
+    }
 
     return 0;
 }
