@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # SAT Solver executable (make this a variable)
-sat_solver_name="DPLL_CCL_VSIDS" # Changed to just the name
+sat_solver_name="DPLL_CDCL_VSIDS" # Changed to just the name
 sat_solver_exe="./$sat_solver_name" # Prepend "./"
 sat_solver_cpp="$sat_solver_name.cpp" # Added source file variable
 

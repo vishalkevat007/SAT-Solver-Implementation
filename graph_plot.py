@@ -15,19 +15,19 @@ plt.rcParams['legend.fontsize'] = 14     # Legend text
 df = pd.read_csv('solver_comparison_tabulated.csv')
 
 # 2. Compute per‐row normalized times (seconds)
-df['norm_ccl_time']   = df['CCL(s)']   / df['DPLL(s)']
+df['norm_cdcl_time']   = df['CDCL(s)']   / df['DPLL(s)']
 df['norm_vsids_time'] = df['VSIDS(s)'] / df['DPLL(s)']
 
 # 3. Compute per‐row normalized memory usage (KB)
-df['norm_ccl_mem']    = df['CCL(KB)']   / df['DPLL(KB)']
+df['norm_cdcl_mem']    = df['CDCL(KB)']   / df['DPLL(KB)']
 df['norm_vsids_mem']  = df['VSIDS(KB)'] / df['DPLL(KB)']
 
 # Optional: inspect the new columns
 print(df[['Variables',
-          'DPLL(s)',   'CCL(s)',   'VSIDS(s)',
-          'norm_ccl_time',   'norm_vsids_time',
-          'DPLL(KB)',  'CCL(KB)',  'VSIDS(KB)',
-          'norm_ccl_mem',    'norm_vsids_mem']])
+          'DPLL(s)',   'CDCL(s)',   'VSIDS(s)',
+          'norm_cdcl_time',   'norm_vsids_time',
+          'DPLL(KB)',  'CDCL(KB)',  'VSIDS(KB)',
+          'norm_cdcl_mem',    'norm_vsids_mem']])
 
 # 4. X positions: one slot per row, in file order
 x = range(len(df))
@@ -41,10 +41,10 @@ fig, ax = plt.subplots(figsize=(12,6))
 ax.axhline(1.0, color='green', linestyle='-', linewidth=2, label='DPLL')
 
 # Normalized time curves
-ax.plot(x, df['norm_ccl_time'], linestyle='-',
-        label='DPLL + Conflict Clause Learning')
+ax.plot(x, df['norm_cdcl_time'], linestyle='-',
+        label='DPLL + Conflict-Driven Clause Learning')
 ax.plot(x, df['norm_vsids_time'], linestyle='-',
-        label='DPLL + Conflict Clause Learning + VSIDS')
+        label='DPLL + Conflict-Driven Clause Learning + VSIDS')
 
 # X‐ticks and labels
 ax.set_xticks(x)
@@ -81,10 +81,10 @@ fig, ax = plt.subplots(figsize=(12,6))
 ax.axhline(1.0, color='green', linestyle='-', linewidth=2, label='DPLL')
 
 # Normalized memory curves
-ax.plot(x, df['norm_ccl_mem'], linestyle='-',
-        label='DPLL + Conflict Clause Learning')
+ax.plot(x, df['norm_cdcl_mem'], linestyle='-',
+        label='DPLL + Conflict-Driven Clause Learning')
 ax.plot(x, df['norm_vsids_mem'], linestyle='-',
-        label='DPLL + Conflict Clause Learning + VSIDS')
+        label='DPLL + Conflict-Driven Clause Learning + VSIDS')
 
 # X‐ticks and labels
 ax.set_xticks(x)

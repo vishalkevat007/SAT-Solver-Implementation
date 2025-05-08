@@ -1,15 +1,15 @@
-# SAT Solver Implementation with DPLL, CCL, and VSIDS Heuristics
+# SAT Solver Implementation with DPLL, CDCL, and VSIDS Heuristics
 
-This project implements a SAT solver using the DPLL algorithm with Conflict-Clause-Learning (CCL) and Variable State Independent Decaying Sum (VSIDS) heuristics in C++. It is designed to read a CNF file, solve the Boolean satisfiability problem, and print the results.
+This project implements a SAT solver using the DPLL algorithm with Conflict-Driven Clause Learning (CDCL) and Variable State Independent Decaying Sum (VSIDS) heuristics in C++. It is designed to read a CNF file, solve the Boolean satisfiability problem, and print the results.
 
-It also implements the basic DPLL and basic DPLL with Conflict-Clause-Learning (CCL) for benchmarking.
+It also implements the basic DPLL and basic DPLL with Conflict-Driven Clause Learning (CDCL) for benchmarking.
 
 ---
 
 ## Directory Structure
 
-- **`DPLL_CCL_VSIDS.cpp`**: Contains DPLL algorithm with Conflict-Clause-Learning and VSIDS heuristics.
-- **`DPLL_CCL.cpp`**: Contains DPLL algorithm with Conflict-Clause-Learning.
+- **`DPLL_CDCL_VSIDS.cpp`**: Contains DPLL algorithm with Conflict-Driven Clause Learning and VSIDS heuristics.
+- **`DPLL_CDCL.cpp`**: Contains DPLL algorithm with Conflict-Driven Clause Learning.
 - **`DPLL.cpp`**: Contains basic DPLL algorithm only.
 - **`benchmark_files/`**: This folder contains various CNF files for testing the SAT solver.
 - **`benchmark.py`**: This is benchmarking script which compares the time taken and memory usage of the above three SAT solvers.
@@ -40,8 +40,8 @@ It also implements the basic DPLL and basic DPLL with Conflict-Clause-Learning (
 3. Compile the three SAT solver using the following command:
 
 ```bash
-   g++ -std=c++17 -O2 DPLL_CCL_VSIDS.cpp -o DPLL_CCL_VSIDS
-   g++ -std=c++17 -O2 DPLL_CCL.cpp -o DPLL_CCL
+   g++ -std=c++17 -O2 DPLL_CDCL_VSIDS.cpp -o DPLL_CDCL_VSIDS
+   g++ -std=c++17 -O2 DPLL_CDCL.cpp -o DPLL_CDCL
    g++ -std=c++17 -O2 DPLL.cpp -o DPLL
 ```
 
@@ -49,7 +49,7 @@ It also implements the basic DPLL and basic DPLL with Conflict-Clause-Learning (
 
    Example:
 ```bash
-   ./DPLL_CCL_VSIDS benchmark_files/aim-50-3_4-yes1-4.cnf
+   ./DPLL_CDCL_VSIDS benchmark_files/aim-50-3_4-yes1-4.cnf
 ```
 
 ### Output

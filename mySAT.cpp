@@ -1,4 +1,4 @@
-// DPLL + CCL + VSIDS
+// DPLL + CDCL + VSIDS
 
 #include <iostream>
 #include <fstream>

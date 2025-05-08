@@ -6,8 +6,8 @@ import pandas as pd
 # Binaries and their labels
 solvers = [
     ("./DPLL", "DPLL"),
-    ("./DPLL_CCL", "CCL"),
-    ("./DPLL_CCL_VSIDS", "VSIDS")
+    ("./DPLL_CDCL", "CDCL"),
+    ("./DPLL_CDCL_VSIDS", "VSIDS")
 ]
  
 # Folder and list of CNF files to test
@@ -80,17 +80,17 @@ df = df.sort_values(by=["Variables", "Clauses"])
 # Rename columns for visual match with figure
 df = df.rename(columns={
     "Time (DPLL)": "DPLL(s)",
-    "Time (CCL)": "CCL(s)",
+    "Time (CDCL)": "CDCL(s)",
     "Time (VSIDS)": "VSIDS(s)",
     "Memory (DPLL)": "DPLL(KB)",
-    "Memory (CCL)": "CCL(KB)",
+    "Memory (CDCL)": "CDCL(KB)",
     "Memory (VSIDS)": "VSIDS(KB)"
 })
  
 # Reorder columns
 df = df[["Benchmark", "Variables", "Clauses", "Result",
-         "DPLL(s)", "CCL(s)", "VSIDS(s)",
-         "DPLL(KB)", "CCL(KB)", "VSIDS(KB)"]]
+         "DPLL(s)", "CDCL(s)", "VSIDS(s)",
+         "DPLL(KB)", "CDCL(KB)", "VSIDS(KB)"]]
  
 # Print table
 print(df.to_string(index=False))

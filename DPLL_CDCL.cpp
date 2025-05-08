@@ -1,4 +1,4 @@
-// DPLL + CCL
+// DPLL + CDCL
 
 #include <iostream>
 #include <fstream>
@@ -428,7 +428,7 @@ vector<unordered_set<int>> load_cnf(const string &filename) {
 //--------------------------------------------------------------
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        cout << "Usage: ./DPLL_CCL <cnf_file>\n";
+        cout << "Usage: ./DPLL_CDCL <cnf_file>\n";
         return 1;
     }
 
@@ -450,7 +450,7 @@ int main(int argc, char* argv[]) {
         chrono::duration<double> time_taken = end_time - start_time;
         long long memory_used = getMemoryUsage();
 
-        cout << "[DPLL + CCL]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
+        cout << "[DPLL + CDCL]\nRESULT: " << (result ? "SAT" : "UNSAT") << "\n";
         if (result)
             solver.print_assignments();
         std::cout << std::fixed << std::setprecision(7);
